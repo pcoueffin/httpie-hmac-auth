@@ -1,7 +1,7 @@
 httpie-visionect-auth
-================
+=====================
 
-`HMAC <https://tools.ietf.org/html/rfc2104>`_ auth plugin for `HTTPie <https://github.com/jkbr/httpie>`_.
+`HMAC for JoanAssistant <https://api.visionect.com/>`_ auth plugin for `HTTPie <https://github.com/jkbr/httpie>`_.
 
 
 HTTP requests will be signed with a shared secret key using HMAC. Differs from AWS or other HMAC strings because: JoanAssistant
@@ -46,22 +46,16 @@ Usage
 
 .. code-block:: bash
 
-    $ http --auth-type=visionect --auth='client:secret' example.org
+    $ http -j --auth-type=visionect --auth='client:secret' server:8081/api/users/
 
 Examples
 --------
 
-To authenticate a client request when an access key is required by the server to lookup the shared secret:
+To request status on all registered Joan Devices
 
 .. code-block:: bash
 
-    $ http --auth-type=visionect --auth="client:secret" example.org
-
-To authenticate a client request when there is no requirement for a client to supply an access key:
-
-.. code-block:: bash
-
-    $ http --auth-type=visionect --auth=":secret" example.org
+    $ http -j --auth-type=visionect --auth="client:secret" server:8081/api/devices/
 
 License
 -------
