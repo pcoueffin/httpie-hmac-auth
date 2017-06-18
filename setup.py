@@ -5,27 +5,27 @@ except ImportError:
     pass
 
 setup(
-    name='httpie-hmac-auth',
-    description='HMAC Auth plugin for HTTPie.',
+    name='httpie-visionect-auth',
+    description='HMAC Auth plugin for Joan Visionect and HTTPie.',
     long_description=open('README.rst').read().strip(),
-    version='0.2.3',
-    author='Nick Satterly',
-    author_email='nick.satterly@theguardian.com',
+    version='0.0.1',
+    author='Pierre Coueffin',
+    author_email='pcoueffin@gmail.com',
     license='MIT',
-    url='https://github.com/guardian/httpie-hmac-auth',
-    download_url='https://github.com/guardian/httpie-hmac-auth',
-    py_modules=['httpie_hmac_auth'],
+    url='https://github.com/pcoueffin/httpie-visionect-auth',
+    download_url='https://github.com/pcoueffin/httpie-visionect-auth',
+    py_modules=['httpie_visionect_auth'],
     zip_safe=False,
     entry_points={
         'httpie.plugins.auth.v1': [
-            'httpie_hmac_auth = httpie_hmac_auth:HmacAuthPlugin'
+            'httpie_visionect_auth = httpie_visionect_auth:HmacAuthPlugin'
         ]
     },
     install_requires=[
         'httpie>=0.7.0'
     ],
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 3 - Alpha',
         'Programming Language :: Python',
         'Intended Audience :: Developers',
         'Environment :: Plugins',

@@ -14,8 +14,8 @@ try:
 except ImportError:
     from urllib.parse import urlparse
 
-__version__ = '0.2.1'
-__author__ = 'Nick Satterly'
+__version__ = '0.0.1'
+__author__ = 'Pierre Coueffin'
 __licence__ = 'MIT'
 
 
@@ -28,18 +28,8 @@ class HmacAuth:
         method = r.method
 
         content_type = r.headers.get('content-type')
-        if not content_type:
-            content_type = ''
-
-        content_md5 = r.headers.get('content-md5')
-        if not content_md5:
-            if content_type:
-                m = hashlib.md5()
-                m.update(r.body)
-                content_md5 = base64.encodestring(m.digest()).rstrip()
-                r.headers['Content-MD5'] = content_md5
-            else:
-                content_md5 = ''
+        if (content_type != 'application/json'):
+            raise ValueError('Visionect will not work unless you explicitly use application/json')
 
         httpdate = r.headers.get('date')
         if not httpdate:
@@ -47,19 +37,18 @@ class HmacAuth:
             httpdate = now.strftime('%a, %d %b %Y %H:%M:%S GMT')
             r.headers['Date'] = httpdate
 
-        url = urlparse(r.url)
-        path = url.path
+        path = urlparse(r.url).path
 
-        string_to_sign = '\n'.join([method, content_md5, content_type, httpdate, path]).encode('utf-8')
-        digest = hmac.new(self.secret_key, string_to_sign, hashlib.sha256).digest()
-        signature = base64.encodestring(digest).rstrip().decode('utf-8')
+        string_to_sign = method + "\n\n" + content_type + "\n" +  httpdate + "\n" + path
+        signature = base64.encodestring(hmac.new(self.secret_key, string_to_sign, hashlib.sha256).digest()).strip()
+
 
         if self.access_key == '':
-            r.headers['Authorization'] = 'HMAC %s' % signature
+            raise ValueError('HMAC User Name cannot be empty.')
         elif self.secret_key == '':
             raise ValueError('HMAC secret key cannot be empty.')
         else:
-            r.headers['Authorization'] = 'HMAC %s:%s' % (self.access_key, signature)
+            r.headers['Authorization'] = '%s:%s' % (self.access_key, signature)
 
         return r
 
@@ -67,8 +56,8 @@ class HmacAuth:
 class HmacAuthPlugin(AuthPlugin):
 
     name = 'HMAC token auth'
-    auth_type = 'hmac'
-    description = 'Sign requests using a HMAC authentication method like AWS'
+    auth_type = 'visionect'
+    description = 'Sign requests using a HMAC authentication method for JoanAssistant Visionect'
 
     def get_auth(self, username=None, password=None):
         return HmacAuth(username, password)
